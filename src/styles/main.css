@@ -2,6 +2,13 @@
 
 @theme {
   --color-page-bg: #0f0f0f;
+  --color-base-text: #f0f0f0;
+  --color-sub-text: #7e7e7e;
+  --color-component-outlines: #474747;
+  --color-base-red: #ff0014;
+
+  --font-main: 'Heebo', sans-serif;
+  --font-accent: 'IBM Plex Mono', monospace;
 }
 
 body {
