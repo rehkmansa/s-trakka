@@ -1,1 +1,10 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-page-bg: #0f0f0f;
+}
+
+body {
+  /* background-color: #0f0f0f; */
+  height: 100vh;
+}
