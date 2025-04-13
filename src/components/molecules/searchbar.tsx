@@ -22,7 +22,7 @@ export const Searchbar = (props: SearchbarProps) => {
   };
 
   return (
-    <form onSubmit={search} className={cn('relative w-full', wrapperClassName)}>
+    <form onSubmit={search} className={cn('relative w-full text-base', wrapperClassName)}>
       <SearchIcon className={cn('absolute top-1/2 left-3.5 -translate-y-1/2', iconClassName)} />
       <input
         value={text}
