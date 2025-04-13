@@ -20,29 +20,3 @@ export const SearchIcon = (props: IconProps) => (
     />
   </svg>
 );
-
-export const CopyIcon = (props: IconProps) => (
-  <svg
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path
-      d="M16 3H4v13"
-      stroke="#7E7E7E"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M8 7h12v12a2 2 0 01-2 2h-8a2 2 0 01-2-2V7z"
-      stroke="#7E7E7E"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
