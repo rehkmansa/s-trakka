@@ -4,7 +4,7 @@ import { MOCK_TRADER_PROFILE_INFO } from '~/mock/data';
 import { TraderProfileRow } from '~/types/global';
 
 const Row = ({ label, value, type }: TraderProfileRow) => (
-  <div className="flex flex-col gap-[7px]">
+  <div className="flex flex-col gap-[7px] shrink-0">
     <h4 className="tracking-wider font-extralight">{label}</h4>
     {type == 'amount' && <TextWithEthIcon>{value}</TextWithEthIcon>}
     {type === 'progression' && <NeonText className="tracking-wider">{value}</NeonText>}

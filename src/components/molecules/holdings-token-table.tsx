@@ -28,31 +28,36 @@ interface HoldingsTokenTableProps {
  */
 export const HoldingsTokenTable = ({ data }: HoldingsTokenTableProps) => {
   return (
-    <div>
-      <div className={cn('px-3 pb-2', GRID_STYLE)}>
+    <div className="flex-1 flex-col">
+      <div className={cn('px-3 pb-2 shrink-0', GRID_STYLE)}>
         {tableHeaders.map((header) => (
           <div className={cn('text-sm/[20px] font-extralight text-chart-title', header.className)}>
             <p>{header.label}</p>
           </div>
         ))}
       </div>
-      {data.map((rec) => (
-        <div key={rec.id} className={cn('text-sm/[188.4%] font-accent py-0.5 px-3.5', GRID_STYLE)}>
-          <div className="col-span-2 flex items-center gap-3">
-            <img
-              className="size-5 rounded-full object-cover"
-              src={getImageSrc(rec.logo, rec.symbol)}
-              alt=""
-            />
-            <h4>{rec.symbol}</h4>
+      <div className="flex-1 overflow-y-scroll">
+        {data.map((rec) => (
+          <div
+            key={rec.id}
+            className={cn('text-sm/[188.4%] font-accent py-0.5 px-3.5', GRID_STYLE)}
+          >
+            <div className="col-span-2 flex items-center gap-3">
+              <img
+                className="size-5 rounded-full object-cover"
+                src={getImageSrc(rec.logo, rec.symbol)}
+                alt=""
+              />
+              <h4>{rec.symbol}</h4>
+            </div>
+            <p className="text-right">{toHumanReadableNumber(rec.market_cap)}</p>
+            <TextWithEthIcon className="text-right justify-end">
+              {rec.value.toFixed(2)}
+            </TextWithEthIcon>
+            <p className="text-right">{rec.amount.toFixed(2)}</p>
           </div>
-          <p className="text-right">{toHumanReadableNumber(rec.market_cap)}</p>
-          <TextWithEthIcon className="text-right justify-end">
-            {rec.value.toFixed(2)}
-          </TextWithEthIcon>
-          <p className="text-right">{rec.amount.toFixed(2)}</p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

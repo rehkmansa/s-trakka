@@ -3,7 +3,7 @@ import { formatWalletAddress } from '~/lib/utils/helpers';
 import { MOCK_LEFT_PROFILE } from '~/mock/data';
 
 export const LeftViewProfile = () => (
-  <div className="relative w-full px-5 py-3.5 bg-component-bg">
+  <div className="relative w-full px-5 py-3.5 bg-component-bg shrink-0">
     <svg
       viewBox="0 0 592 121"
       xmlns="http://www.w3.org/2000/svg"

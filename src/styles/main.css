@@ -18,6 +18,8 @@
   --radius-component: 5px;
 
   --spacing-15px: 15px;
+  --spacing-header: 103px;
+  --spacing-main-content: 10px;
 }
 
 body {

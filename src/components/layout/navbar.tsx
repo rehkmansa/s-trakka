@@ -8,7 +8,7 @@ import { MOCK_TOP_BAR_PROFILE } from '~/mock/data';
 
 export const Navbar = () => {
   return (
-    <header className="flex gap-10 justify-between items-center p-[22px] border-b border-component-outlines">
+    <header className="flex gap-10 shrink-0 justify-between items-center h-header p-[22px] border-b border-component-outlines">
       <div className="flex items-center justify-between gap-10 w-full max-w-[550px] pl-[22px]">
         <Link className="w-full max-w-10">
           <Logo />
@@ -17,7 +17,7 @@ export const Navbar = () => {
           {NAV_LINKS.map((li) => (
             <Link
               className={cn(
-                'px-4 tracking-wider text-center relative whitespace-nowrap uppercase',
+                'px-2 tracking-wider text-center relative whitespace-nowrap uppercase',
                 {
                   'before:absolute before:-bottom-0.5 before:rounded-xs before:w-1/4 before:bg-base-red before:h-0.5 before:left-1/2 before:-translate-x-1/2 text-base-red':
                     li?.active,
