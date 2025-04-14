@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { type ClassArray } from 'clsx';
+import millify from 'millify';
 import { twMerge } from 'tailwind-merge';
 import { ComponentTypes } from '~/types/global';
 
@@ -33,5 +34,7 @@ export const makeComponent = (comp: ComponentTypes | undefined) => (comp ?? 'p')
 
 export const getAvatarUrl = (name: string): string => {
   const encodedName = encodeURIComponent(name.trim());
-  return `https://ui-avatars.com/api/?name=${encodedName}`;
+  return `https://ui-avatars.com/api/?name=${encodedName}&background=3A3749&color=ffffff`;
 };
+
+export const toHumanReadableNumber = (num: number) => millify(num, { precision: 2 });

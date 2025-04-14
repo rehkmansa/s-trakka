@@ -1,16 +1,18 @@
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
-import { cn, getAvatarUrl } from '~/lib/utils/helpers';
+import { cn, getAvatarUrl, toHumanReadableNumber } from '~/lib/utils/helpers';
 import { Token } from '~/mock/data';
 import { Maybe } from '~/types/global';
 
 const tableHeaders = [
   { label: 'Token Name', className: 'col-span-2' },
-  { label: 'Market Cap', className: 'text-base-text' },
+  { label: 'Market Cap', className: 'text-base-text text-right' },
   { label: 'Value', className: 'text-right' },
   { label: 'Amount', className: 'text-right' },
 ];
 
 const getImageSrc = (src: Maybe<string>, name: string) => src ?? getAvatarUrl(name);
+
+const GRID_STYLE = 'grid grid-cols-5 gap-4';
 
 interface HoldingsTokenTableProps {
   data: Token[];
@@ -27,7 +29,7 @@ interface HoldingsTokenTableProps {
 export const HoldingsTokenTable = ({ data }: HoldingsTokenTableProps) => {
   return (
     <div>
-      <div className="grid grid-cols-5 px-3 pb-2">
+      <div className={cn('px-3 pb-2', GRID_STYLE)}>
         {tableHeaders.map((header) => (
           <div className={cn('text-sm/[20px] font-extralight text-chart-title', header.className)}>
             <p>{header.label}</p>
@@ -35,7 +37,7 @@ export const HoldingsTokenTable = ({ data }: HoldingsTokenTableProps) => {
         ))}
       </div>
       {data.map((rec) => (
-        <div key={rec.id} className="grid grid-cols-5 text-sm font-accent py-3 px-3.5">
+        <div key={rec.id} className={cn('text-sm/[188.4%] font-accent py-0.5 px-3.5', GRID_STYLE)}>
           <div className="col-span-2 flex items-center gap-3">
             <img
               className="size-5 rounded-full object-cover"
@@ -44,11 +46,11 @@ export const HoldingsTokenTable = ({ data }: HoldingsTokenTableProps) => {
             />
             <h4>{rec.symbol}</h4>
           </div>
-          <p>{rec.market_cap}</p>
+          <p className="text-right">{toHumanReadableNumber(rec.market_cap)}</p>
           <TextWithEthIcon className="text-right justify-end">
-            {rec.price_change_percent.toFixed(2)}
+            {rec.value.toFixed(2)}
           </TextWithEthIcon>
-          <p className="text-right">{rec.volume}</p>
+          <p className="text-right">{rec.amount.toFixed(2)}</p>
         </div>
       ))}
     </div>

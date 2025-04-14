@@ -9,7 +9,7 @@ import { MOCK_TOP_BAR_PROFILE } from '~/mock/data';
 export const Navbar = () => {
   return (
     <header className="flex gap-10 justify-between items-center p-[22px] border-b border-component-outlines">
-      <div className="flex items-center justify-between gap-10 w-full max-w-[500px] pl-[22px]">
+      <div className="flex items-center justify-between gap-10 w-full max-w-[550px] pl-[22px]">
         <Link className="w-full max-w-10">
           <Logo />
         </Link>
