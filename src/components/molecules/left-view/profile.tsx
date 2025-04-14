@@ -2,8 +2,8 @@ import { ProfileInfo } from '~/components/molecules/profile-info';
 import { formatWalletAddress } from '~/lib/utils/helpers';
 import { MOCK_LEFT_PROFILE } from '~/mock/data';
 
-export const LeftSideProfile = () => (
-  <div className="relative w-full px-5 py-3.5">
+export const LeftViewProfile = () => (
+  <div className="relative w-full px-5 py-3.5 bg-component-bg">
     <svg
       viewBox="0 0 592 121"
       xmlns="http://www.w3.org/2000/svg"

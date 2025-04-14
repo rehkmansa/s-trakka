@@ -20,3 +20,27 @@ export const SearchIcon = (props: IconProps) => (
     />
   </svg>
 );
+
+export const EthIcon = (props: IconProps) => (
+  <svg
+    width={11}
+    height={14}
+    viewBox="0 0 11 14"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M5.737.574l4.738 6.432-4.737 6.432L1 7.006 5.737.574z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.475 7.006L5.737 8.58 1 7.006"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

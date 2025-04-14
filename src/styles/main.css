@@ -12,6 +12,8 @@
 
   --font-main: 'Heebo', sans-serif;
   --font-accent: 'IBM Plex Mono', monospace;
+
+  --radius-component: 5px;
 }
 
 body {
