@@ -1,6 +1,7 @@
 import TopNavAvatar from '~/assets/top-nav-avatar.png';
 import LeftViewAvatar from '~/assets/profile-avatar.webp';
 import { TraderProfileRow } from '~/types/global';
+import TokenInfo from './tokens';
 
 export const MOCK_TOP_BAR_PROFILE = {
   name: 'Übermendes',
@@ -20,3 +21,7 @@ export const MOCK_TRADER_PROFILE_INFO: TraderProfileRow[] = [
   { label: 'P&L', value: '???', type: 'progression' },
   { label: 'U P&L', value: '???', type: 'progression' },
 ];
+
+export const MOCK_TOKENS = TokenInfo;
+
+export type Token = (typeof TokenInfo)[number];

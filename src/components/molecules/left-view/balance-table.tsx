@@ -1,19 +1,12 @@
-import { EthIcon } from '~/assets/icons';
 import { NeonText } from '~/components/atoms/neon-text';
-import { cn } from '~/lib/utils/helpers';
+import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
 import { MOCK_TRADER_PROFILE_INFO } from '~/mock/data';
 import { TraderProfileRow } from '~/types/global';
 
 const Row = ({ label, value, type }: TraderProfileRow) => (
   <div className="flex flex-col gap-[7px]">
     <h4 className="tracking-wider font-extralight">{label}</h4>
-    {type == 'amount' && (
-      <p className={cn('tracking-wider flex items-center gap-0.5')}>
-        {value}
-        <EthIcon />
-      </p>
-    )}
-
+    {type == 'amount' && <TextWithEthIcon>{value}</TextWithEthIcon>}
     {type === 'progression' && <NeonText className="tracking-wider">{value}</NeonText>}
   </div>
 );

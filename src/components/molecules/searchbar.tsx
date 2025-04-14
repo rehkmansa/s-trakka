@@ -27,7 +27,7 @@ export const Searchbar = (props: SearchbarProps) => {
       <input
         value={text}
         className={cn(
-          'outline-none border-component-outlines border w-full pl-10 rounded-sm tracking-wider h-[33px] placeholder:text-sub-text',
+          'outline-none border-component-outlines font-extralight border w-full pl-10 rounded-sm tracking-wider h-[33px] placeholder:text-sub-text',
           inputClassName
         )}
         placeholder={placeholder ?? 'Search for token name or address'}
