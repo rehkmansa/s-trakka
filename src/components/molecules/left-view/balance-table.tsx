@@ -14,7 +14,7 @@ const Row = ({ label, value, type }: TraderProfileRow) => (
       </p>
     )}
 
-    {type === 'progression' && <NeonText className="tracking-wide">{value}</NeonText>}
+    {type === 'progression' && <NeonText className="tracking-wider">{value}</NeonText>}
   </div>
 );
 

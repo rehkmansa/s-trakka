@@ -16,10 +16,13 @@ export const Navbar = () => {
         <nav className="text-sub-text font-medium gap-3.5 w-full flex items-center justify-between max-w-[427px]">
           {NAV_LINKS.map((li) => (
             <Link
-              className={cn('px-4 text-center relative whitespace-nowrap uppercase', {
-                'before:absolute before:-bottom-0.5 before:rounded-xs before:w-1/4 before:bg-base-red before:h-0.5 before:left-1/2 before:-translate-x-1/2 text-base-red':
-                  li?.active,
-              })}
+              className={cn(
+                'px-4 tracking-wider text-center relative whitespace-nowrap uppercase',
+                {
+                  'before:absolute before:-bottom-0.5 before:rounded-xs before:w-1/4 before:bg-base-red before:h-0.5 before:left-1/2 before:-translate-x-1/2 text-base-red':
+                    li?.active,
+                }
+              )}
               key={li.label}
               href={li.href}
             >
