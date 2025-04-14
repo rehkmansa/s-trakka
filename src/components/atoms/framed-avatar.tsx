@@ -96,7 +96,11 @@ export const FramedAvatar = (props: FramedAvatarProps) => {
       className={cn('relative', wrapperClassName)}
     >
       <Frame hovered={hovered} />
-      <img src={src} className={cn('relative', className)} alt="" />
+      <img
+        src={src}
+        className={cn('relative rounded-xs object-cover overflow-hidden', className)}
+        alt=""
+      />
     </motion.div>
   );
 };

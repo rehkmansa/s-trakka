@@ -6,7 +6,7 @@ export const BaseLayout = ({ children }: PropsWithChildren) => {
   return (
     <SmoothScroll>
       <Navbar />
-      <main>{children}</main>
+      <main className="p-2.5">{children}</main>
     </SmoothScroll>
   );
 };

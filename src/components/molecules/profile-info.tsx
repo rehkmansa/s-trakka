@@ -26,11 +26,13 @@ export const ProfileInfo = (props: ProfileInfoProps) => {
       {isSecondary ? (
         <FramedAvatar src={src} className="size-[60px]" wrapperClassName="w-full max-w-[60px]" />
       ) : (
-        <img className="size-[92px]" src={src} alt="" />
+        <img className="size-[92px] rounded-[30px] object-cover" src={src} alt="" />
       )}
-      <div className="space-y-0.5">
+      <div className={cn('space-y-2.5', { 'space-y-1.5': isSecondary })}>
         <CopyAble text={name} allowCopy={allowCopy}>
-          <h4 className={cn('text-2xl leading-none', { 'text-xl': isSecondary })}>{name}</h4>
+          <h4 className={cn('text-2xl leading-none', { 'text-xl leading-none': isSecondary })}>
+            {name}
+          </h4>
         </CopyAble>
         <CopyAble text={walletAddress} allowCopy={allowCopy}>
           <p className={cn('text-base text-base-red leading-none', { 'text-sm': isSecondary })}>
