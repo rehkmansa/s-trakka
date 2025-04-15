@@ -60,3 +60,7 @@ export const COLORS: Colors = {
   'base-text': '#f0f0f0',
   'base-red': '#ff0014',
 };
+
+export const BASE_TEXT = COLORS['base-text'];
+
+export const BASE_RED = COLORS['base-red'];

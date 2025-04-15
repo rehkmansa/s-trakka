@@ -10,12 +10,11 @@ import {
   Tooltip,
   Legend,
   ChartOptions,
-  ChartData,
   ScriptableScaleContext,
-  ChartDataset,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { COLORS } from '~/constants/colors';
+import { BASE_RED, BASE_TEXT } from '~/constants/colors';
+import { useGetGraphDataset } from '~/hooks/use-get-graph-dataset';
 
 ChartJS.register(
   LineElement,
@@ -28,48 +27,7 @@ ChartJS.register(
   Legend
 );
 
-const lineColors = ['#00ff99', '#a25ed2', '#f95200'];
-
-const BASE_TEXT = COLORS['base-text'];
-const BASE_RED = COLORS['base-red'];
-
 const labels: string[] = Array.from({ length: 12 }, (_, i) => `T${i + 1}`);
-
-const baseLineStyles: Omit<ChartDataset<'line'>, 'data'> = {
-  borderWidth: 2,
-  pointBackgroundColor: BASE_TEXT,
-  pointRadius: (ctx) => (ctx.dataIndex === ctx.dataset.data.length - 1 ? 6 : 0),
-  pointBorderColor: (ctx) =>
-    ctx.dataIndex === ctx.dataset.data.length - 1 ? BASE_TEXT : 'transparent',
-  pointBorderWidth: (ctx) => (ctx.dataIndex === ctx.dataset.data.length - 1 ? 2 : 0),
-  tension: 0.4,
-};
-
-const datasets: ChartDataset<'line'>[] = [
-  {
-    label: 'Token B',
-    data: [5, 8, 12, 10, 9, 11, 10, 13, 15, 17, 20, 22],
-    borderColor: lineColors[0],
-    ...baseLineStyles,
-  },
-  {
-    label: 'Token B',
-    data: [-10, 5, 35, 30, 25, 40, 15, 10, 30, 40, 25, 35],
-    borderColor: lineColors[1],
-    ...baseLineStyles,
-  },
-  {
-    label: 'Token C',
-    data: [-30, -10, 5, 10, -5, -10, 5, 10, 15, 20, 10, -5],
-    borderColor: lineColors[2],
-    ...baseLineStyles,
-  },
-];
-
-const data: ChartData<'line'> = {
-  labels,
-  datasets,
-};
 
 const getGridColor = (ctx: ScriptableScaleContext) => {
   const v = ctx.tick.value;
@@ -108,6 +66,8 @@ const options: ChartOptions<'line'> = {
 };
 
 export const TokenStrengthChart: React.FC = () => {
+  const datasets = useGetGraphDataset();
+
   return (
     <div className="relative w-full py-3.5 bg-component-bg shrink-0 h-[467px] px-10">
       <svg
@@ -128,7 +88,7 @@ export const TokenStrengthChart: React.FC = () => {
         />
       </svg>
       <div className="w-full h-full">
-        <Line data={data} options={options} />
+        <Line data={{ labels, datasets }} options={options} />
       </div>
     </div>
   );

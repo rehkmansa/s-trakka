@@ -67,8 +67,6 @@ const parseSelectedTokens = (query: IsUncertain<string>) => {
   return decodeURIComponent(query).split(DELIMITER);
 };
 
-const DEFAULT_SELECTION_COLOR = assignSelectionColor(0);
-
 export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
   rangeArray(rows).map((n) => (
     <Wrapper key={n}>
@@ -171,7 +169,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
           const selected = position >= 0;
 
           const selectionColor: SelectionColors = iife(() => {
-            if (!position) return DEFAULT_SELECTION_COLOR;
+            if (position < 0) return assignSelectionColor(selectedTokens.length);
             return assignSelectionColor(position);
           });
 
