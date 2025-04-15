@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { HoldingsTokenTable } from '~/components/molecules/holdings-token-table';
+import {
+  HoldingsTokenTable,
+  HoldingsTokenTableLoader,
+} from '~/components/molecules/holdings-token-table';
 import { Searchbar } from '~/components/molecules/searchbar';
 import { PAGE_LIMIT } from '~/constants/api';
 import { useDebouncedSearch } from '~/hooks/use-debounced-search';
@@ -39,7 +42,9 @@ export const HoldingsTable = () => {
           isFetchingMore={loading || isFetchingMore}
         />
       ) : (
-        <>Loading...</>
+        <div className="flex-1 overflow-y-hidden">
+          <HoldingsTokenTableLoader rows={15} />
+        </div>
       )}
     </div>
   );

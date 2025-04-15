@@ -60,6 +60,16 @@ const getCurrentQueryParams = (query: IsUncertain<string>) => {
   return decodeURIComponent(query).split(DELIMITER);
 };
 
+export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
+  rangeArray(rows).map((n) => (
+    <Wrapper key={n}>
+      <SkeletonLoader className="col-span-2" />
+      <SkeletonLoader />
+      <SkeletonLoader />
+      <SkeletonLoader />
+    </Wrapper>
+  ));
+
 /**
  * HoldingsTokenTable
  *
@@ -151,15 +161,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
           );
         })}
 
-        {isFetchingMore &&
-          rangeArray(4).map((n) => (
-            <Wrapper key={n}>
-              <SkeletonLoader className="col-span-2" />
-              <SkeletonLoader />
-              <SkeletonLoader />
-              <SkeletonLoader />
-            </Wrapper>
-          ))}
+        {isFetchingMore && <HoldingsTokenTableLoader rows={4} />}
       </InfiniteScrollView>
     </div>
   );

@@ -19,8 +19,6 @@ export const useGetTokens = (offset: number, search: string | undefined) => {
     try {
       const res = await getTokens({ offset, search });
 
-      console.log(res);
-
       setData((prev) => {
         if (offset === 0 || isNewSearch || !prev) return res;
         return { data: mergeArrayRecords(prev.data, res.data, 'address'), left: res.left };
