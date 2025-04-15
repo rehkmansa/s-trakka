@@ -41,6 +41,7 @@ export const HoldingsTable = () => {
           data={tokens.data}
           isFetchingMore={loading || isFetchingMore}
           offset={offset}
+          search={debouncedValue}
         />
       ) : (
         <div className="flex-1 overflow-y-hidden">
