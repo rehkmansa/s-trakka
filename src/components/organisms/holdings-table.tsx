@@ -12,7 +12,7 @@ export const HoldingsTable = () => {
     <div
       className={cn(
         'bg-component-bg border border-component-outlines rounded-component',
-        'flex-1 flex flex-col'
+        'flex-1 flex flex-col overflow-auto'
       )}
     >
       <div className="shrink-0">

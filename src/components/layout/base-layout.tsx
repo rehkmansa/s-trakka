@@ -5,7 +5,7 @@ export const BaseLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Navbar />
-      <main className="p-2.5 flex-1 overflow-hidden flex flex-col">{children}</main>
+      <main className="p-2.5 flex-1 flex flex-col overflow-y-auto">{children}</main>
     </>
   );
 };

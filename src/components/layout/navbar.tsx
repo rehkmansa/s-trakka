@@ -17,7 +17,7 @@ export const Navbar = () => {
           {NAV_LINKS.map((li) => (
             <Link
               className={cn(
-                'px-2 tracking-wider text-center relative whitespace-nowrap uppercase',
+                'px-2 tracking-wider text-center relative whitespace-nowrap uppercase outline-none focus:ring focus:ring-component-outlines',
                 {
                   'before:absolute before:-bottom-0.5 before:rounded-xs before:w-1/4 before:bg-base-red before:h-0.5 before:left-1/2 before:-translate-x-1/2 text-base-red':
                     li?.active,

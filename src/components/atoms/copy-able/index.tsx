@@ -45,7 +45,9 @@ export const CopyAble = (props: CopyAbleProps) => {
     <div className={cn('flex items-center gap-1', className)}>
       {children}
       <button
-        className={cn({ 'cursor-default': copied })}
+        className={cn('outline-none focus:ring rounded-[2px] focus:ring-component-outlines', {
+          'cursor-default ': copied,
+        })}
         onClick={copyText}
         aria-label={ariaLabel}
       >
