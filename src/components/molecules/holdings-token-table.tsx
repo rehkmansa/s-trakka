@@ -1,7 +1,7 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { Fragment, PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
-import { FadeYWhileInView } from '~/components/organisms/animations';
+import { FadeYWhileInView, StaggeredAnimation } from '~/components/organisms/animations';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
 import { TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
 import { SelectionColors } from '~/constants/colors';
@@ -55,6 +55,7 @@ interface HoldingsTokenTableProps {
   onLoadMore: () => void;
   hasMore: boolean;
   isFetchingMore: boolean;
+  offset: number;
 }
 
 const SkeletonLoader = ({ className }: PropsWithClassname) => (
@@ -71,6 +72,44 @@ export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
     </Wrapper>
   ));
 
+interface TableRowProps {
+  selectionColor: string;
+  token: Token;
+  onClick: () => void;
+  selected: boolean;
+}
+const TableRow = ({ onClick, selectionColor, token, selected }: TableRowProps) => (
+  <Wrapper
+    style={
+      {
+        '--list-selection-color': `var(${selectionColor})`,
+      } as React.CSSProperties
+    }
+    key={token.address}
+    onClick={onClick}
+    className={cn(
+      'relative cursor-pointer before:hidden hover:before:block',
+      'before:absolute before:inset-0',
+      'before:bg-(--list-selection-color)/30 before:blur-[2px]',
+      { 'border border-(--list-selection-color) text-base-text': selected }
+    )}
+  >
+    <div className="col-span-2 flex items-center gap-3 relative">
+      <img
+        className="size-5 rounded-full object-cover"
+        src={getImageSrc(token.logo, token.symbol)}
+        alt=""
+      />
+      <h4>{token.symbol}</h4>
+    </div>
+    <p className="text-right relative">{toHumanReadableNumber(token.market_cap)}</p>
+    <TextWithEthIcon className="text-right justify-end relative">
+      {token.value.toFixed(2)}
+    </TextWithEthIcon>
+    <p className="text-right relative">{token.amount.toFixed(2)}</p>
+  </Wrapper>
+);
+
 /**
  * HoldingsTokenTable
  *
@@ -80,7 +119,7 @@ export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
  * grid-based or plain HTML table solutions.
  */
 export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
-  const { data, onLoadMore, hasMore, isFetchingMore } = props;
+  const { data, onLoadMore, hasMore, isFetchingMore, offset } = props;
 
   const { addToken, removeToken, bulkAddTokens, tokens } = useSelectedTokenStore();
 
@@ -152,61 +191,55 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
         </div>
         <div className="bg-[linear-gradient(to_right,#474747_31%,#f0f0f0_51%,#474747_71.5%)] w-full h-px" />
       </div>
-      <InfiniteScrollView
-        hasMore={hasMore}
-        onLoadMore={onLoadMore}
-        loading={isFetchingMore}
-        className="flex-1 overflow-y-auto outline-none focus:ring focus:ring-component-outlines"
-      >
-        {data.map((rec) => {
-          const stringId = rec.id.toString();
+      <StaggeredAnimation className="flex-1 overflow-hidden">
+        <InfiniteScrollView
+          hasMore={hasMore}
+          onLoadMore={onLoadMore}
+          loading={isFetchingMore}
+          className="h-full overflow-y-auto outline-none focus:ring focus:ring-component-outlines"
+        >
+          {data.map((rec) => {
+            const stringId = rec.id.toString();
 
-          const position = selectedTokens.findIndex((c) => c == stringId);
+            const position = selectedTokens.findIndex((c) => c == stringId);
 
-          const selected = position >= 0;
+            const selected = position >= 0;
 
-          const selectionColor: SelectionColors = iife(() => {
-            if (position < 0) return assignSelectionColor(selectedTokens.length);
-            return assignSelectionColor(position);
-          });
+            const selectionColor: SelectionColors = iife(() => {
+              if (position < 0) return assignSelectionColor(selectedTokens.length);
+              return assignSelectionColor(position);
+            });
 
-          return (
-            <FadeYWhileInView amount={0.25} initialY={10}>
-              <Wrapper
-                style={
-                  {
-                    '--list-selection-color': `var(${selectionColor})`,
-                  } as React.CSSProperties
-                }
-                key={rec.address}
-                onClick={() => handleWrapperClick(stringId, rec.symbol)}
-                className={cn(
-                  'relative cursor-pointer before:hidden hover:before:block',
-                  'before:absolute before:inset-0',
-                  'before:bg-(--list-selection-color)/30 before:blur-[2px]',
-                  { 'border border-(--list-selection-color) text-base-text': selected }
+            const updateTokenState = () => handleWrapperClick(stringId, rec.symbol);
+
+            return (
+              <Fragment key={rec.address}>
+                {offset ? (
+                  <FadeYWhileInView amount={0.25} initialY={10}>
+                    <TableRow
+                      token={rec}
+                      onClick={updateTokenState}
+                      selected={selected}
+                      selectionColor={selectionColor}
+                    />
+                  </FadeYWhileInView>
+                ) : (
+                  <StaggeredAnimation.Child>
+                    <TableRow
+                      token={rec}
+                      onClick={updateTokenState}
+                      selected={selected}
+                      selectionColor={selectionColor}
+                    />
+                  </StaggeredAnimation.Child>
                 )}
-              >
-                <div className="col-span-2 flex items-center gap-3 relative">
-                  <img
-                    className="size-5 rounded-full object-cover"
-                    src={getImageSrc(rec.logo, rec.symbol)}
-                    alt=""
-                  />
-                  <h4>{rec.symbol}</h4>
-                </div>
-                <p className="text-right relative">{toHumanReadableNumber(rec.market_cap)}</p>
-                <TextWithEthIcon className="text-right justify-end relative">
-                  {rec.value.toFixed(2)}
-                </TextWithEthIcon>
-                <p className="text-right relative">{rec.amount.toFixed(2)}</p>
-              </Wrapper>
-            </FadeYWhileInView>
-          );
-        })}
+              </Fragment>
+            );
+          })}
 
-        {isFetchingMore && <HoldingsTokenTableLoader rows={4} />}
-      </InfiniteScrollView>
+          {isFetchingMore && <HoldingsTokenTableLoader rows={4} />}
+        </InfiniteScrollView>
+      </StaggeredAnimation>
     </div>
   );
 };

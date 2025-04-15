@@ -40,6 +40,7 @@ export const HoldingsTable = () => {
           onLoadMore={() => setOffset(offset + PAGE_LIMIT)}
           data={tokens.data}
           isFetchingMore={loading || isFetchingMore}
+          offset={offset}
         />
       ) : (
         <div className="flex-1 overflow-y-hidden">
