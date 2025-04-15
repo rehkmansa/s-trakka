@@ -1,13 +1,17 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
 import { TOKENS_QUERY_KEY } from '~/constants/api';
+import { convertSelectionVarToKey, SelectionColors } from '~/constants/colors';
+import { SelectedToken } from '~/context/selected-token/context';
+import { useSelectedTokenStore } from '~/context/selected-token/use-selected-token';
 import { useWindowQuery } from '~/hooks/use-window-query-params';
 import {
   assignSelectionColor,
   cn,
   getAvatarUrl,
+  iife,
   rangeArray,
   toHumanReadableNumber,
 } from '~/lib/utils/helpers';
@@ -58,10 +62,12 @@ const SkeletonLoader = ({ className }: PropsWithClassname) => (
 
 const DELIMITER = ',';
 
-const getCurrentQueryParams = (query: IsUncertain<string>) => {
+const parseSelectedTokens = (query: IsUncertain<string>) => {
   if (!query) return [];
   return decodeURIComponent(query).split(DELIMITER);
 };
+
+const DEFAULT_SELECTION_COLOR = assignSelectionColor(0);
 
 export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
   rangeArray(rows).map((n) => (
@@ -84,14 +90,25 @@ export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
 export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
   const { data, onLoadMore, hasMore, isFetchingMore } = props;
 
+  const { addToken, removeToken, bulkAddTokens, tokens } = useSelectedTokenStore();
+
   const { addQuery, queryParams, removeQuery } = useWindowQuery();
 
   const tokensQuery = queryParams[TOKENS_QUERY_KEY];
 
-  const selectedTokens = getCurrentQueryParams(tokensQuery);
+  const selectedTokens = parseSelectedTokens(tokensQuery);
 
-  const handleWrapperClick = (tokenId: string) => {
-    const activeTokenIds = getCurrentQueryParams(tokensQuery);
+  const handleWrapperClick = (tokenId: string, address: string) => {
+    const activeTokenIds = parseSelectedTokens(tokensQuery);
+
+    if (tokens[tokenId]) {
+      removeToken(tokenId);
+    } else {
+      // If no item, length is 0, give us first color.
+      const selectionColor = convertSelectionVarToKey(assignSelectionColor(activeTokenIds.length));
+
+      addToken({ address, id: Number(tokenId), selectionColor });
+    }
 
     if (!activeTokenIds.length) return addQuery(TOKENS_QUERY_KEY, tokenId);
 
@@ -105,6 +122,26 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
 
     addQuery(TOKENS_QUERY_KEY, encodeURIComponent([...activeTokenIds, tokenId].join(DELIMITER)));
   };
+
+  // This should hydrate the tokens store only on mount so we sync url state
+  // with token store state.
+  useEffect(() => {
+    const hasTokens = Object.keys(tokens).length > 0;
+    const selectedTokens = parseSelectedTokens(tokensQuery);
+
+    if (hasTokens || !selectedTokens.length) return;
+
+    const parsedSelectedTokens: SelectedToken[] = data
+      .filter((rec) => selectedTokens.includes(rec.id.toString()))
+      .map((c, idx) => ({
+        address: c.address,
+        id: c.id,
+        selectionColor: convertSelectionVarToKey(assignSelectionColor(idx)),
+      }));
+
+    bulkAddTokens(parsedSelectedTokens);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex-1 flex-col flex overflow-hidden min-h-0">
@@ -127,24 +164,31 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
         loading={isFetchingMore}
         className="flex-1 overflow-y-auto outline-none focus:ring focus:ring-component-outlines"
       >
-        {data.map((rec, id) => {
-          const idx = rec.id.toString();
-          const isSelected = selectedTokens.includes(idx);
+        {data.map((rec) => {
+          const stringId = rec.id.toString();
+          const position = selectedTokens.findIndex((c) => c == stringId);
+
+          const selected = position >= 0;
+
+          const selectionColor: SelectionColors = iife(() => {
+            if (!position) return DEFAULT_SELECTION_COLOR;
+            return assignSelectionColor(position);
+          });
 
           return (
             <Wrapper
               style={
                 {
-                  '--list-selection-color': `var(${assignSelectionColor(id)})`,
+                  '--list-selection-color': `var(${selectionColor})`,
                 } as React.CSSProperties
               }
               key={rec.address}
-              onClick={() => handleWrapperClick(idx)}
+              onClick={() => handleWrapperClick(stringId, rec.address)}
               className={cn(
                 'relative cursor-pointer before:hidden hover:before:block',
                 'before:absolute before:inset-0',
                 'before:bg-(--list-selection-color)/30 before:blur-[2px]',
-                { 'border border-(--list-selection-color) text-base-text': isSelected }
+                { 'border border-(--list-selection-color) text-base-text': selected }
               )}
             >
               <div className="col-span-2 flex items-center gap-3 relative">
