@@ -4359,7 +4359,7 @@ export default [
     chain: 'sol',
     address: 'KPEe48yjo8t3zm7FhmtSVyt54SefuhDsyprhxJQpump',
     symbol: 'BONKE',
-    logo: 'https://gmgn.ai/external-res/d5001fcbfa3c1ee68438f8ee86d2cfb4.jpeg',
+    logo: 'https://dd.dexscreener.com/ds-data/tokens/solana/8bfVVyYnARkppQnFdZrthQUgn2FMUcGscd7gtN4Rpump.png?size=lg&key=08f2d0',
     price: 0.000063376,
     price_change_percent: 17.6311,
     swaps: 969,

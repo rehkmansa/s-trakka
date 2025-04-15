@@ -1,6 +1,7 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
+import { FadeYWhileInView } from '~/components/organisms/animations';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
 import { TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
 import { SelectionColors } from '~/constants/colors';
@@ -170,35 +171,37 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
           });
 
           return (
-            <Wrapper
-              style={
-                {
-                  '--list-selection-color': `var(${selectionColor})`,
-                } as React.CSSProperties
-              }
-              key={rec.address}
-              onClick={() => handleWrapperClick(stringId, rec.symbol)}
-              className={cn(
-                'relative cursor-pointer before:hidden hover:before:block',
-                'before:absolute before:inset-0',
-                'before:bg-(--list-selection-color)/30 before:blur-[2px]',
-                { 'border border-(--list-selection-color) text-base-text': selected }
-              )}
-            >
-              <div className="col-span-2 flex items-center gap-3 relative">
-                <img
-                  className="size-5 rounded-full object-cover"
-                  src={getImageSrc(rec.logo, rec.symbol)}
-                  alt=""
-                />
-                <h4>{rec.symbol}</h4>
-              </div>
-              <p className="text-right relative">{toHumanReadableNumber(rec.market_cap)}</p>
-              <TextWithEthIcon className="text-right justify-end relative">
-                {rec.value.toFixed(2)}
-              </TextWithEthIcon>
-              <p className="text-right relative">{rec.amount.toFixed(2)}</p>
-            </Wrapper>
+            <FadeYWhileInView amount={0.25} initialY={10}>
+              <Wrapper
+                style={
+                  {
+                    '--list-selection-color': `var(${selectionColor})`,
+                  } as React.CSSProperties
+                }
+                key={rec.address}
+                onClick={() => handleWrapperClick(stringId, rec.symbol)}
+                className={cn(
+                  'relative cursor-pointer before:hidden hover:before:block',
+                  'before:absolute before:inset-0',
+                  'before:bg-(--list-selection-color)/30 before:blur-[2px]',
+                  { 'border border-(--list-selection-color) text-base-text': selected }
+                )}
+              >
+                <div className="col-span-2 flex items-center gap-3 relative">
+                  <img
+                    className="size-5 rounded-full object-cover"
+                    src={getImageSrc(rec.logo, rec.symbol)}
+                    alt=""
+                  />
+                  <h4>{rec.symbol}</h4>
+                </div>
+                <p className="text-right relative">{toHumanReadableNumber(rec.market_cap)}</p>
+                <TextWithEthIcon className="text-right justify-end relative">
+                  {rec.value.toFixed(2)}
+                </TextWithEthIcon>
+                <p className="text-right relative">{rec.amount.toFixed(2)}</p>
+              </Wrapper>
+            </FadeYWhileInView>
           );
         })}
 
