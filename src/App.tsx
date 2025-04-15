@@ -1,11 +1,14 @@
 import { BaseLayout } from '~/components/layout/base-layout';
-import { TokenStoreProvider } from '~/context/selected-token/provider';
+import { QueryProvider } from '~/context/query-store';
+import { TokenStoreProvider } from '~/context/selected-token';
 import { HomePage } from '~/pages/home';
 
 export const App = () => (
-  <TokenStoreProvider>
-    <BaseLayout>
-      <HomePage />
-    </BaseLayout>
-  </TokenStoreProvider>
+  <QueryProvider>
+    <TokenStoreProvider>
+      <BaseLayout>
+        <HomePage />
+      </BaseLayout>
+    </TokenStoreProvider>
+  </QueryProvider>
 );

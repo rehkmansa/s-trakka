@@ -17,16 +17,16 @@ export const SELECTION_COLORS = [
 
 export type SelectionColors = (typeof SELECTION_COLORS)[number];
 
-const DELIMITER = '--color-selection-';
+export const COLOR_DELIMITER = '--color-selection-';
 
-type ToColorKey<U extends string> = U extends `${typeof DELIMITER}${infer K}` ? K : never;
+type ToColorKey<U extends string> = U extends `${typeof COLOR_DELIMITER}${infer K}` ? K : never;
 
 export type SelectionColorKeys = ToColorKey<SelectionColors>;
 
 type SelectionColorsMap = Record<SelectionColorKeys, string>;
 
 export const convertSelectionVarToKey = <T extends SelectionColors>(colorVar: T): ToColorKey<T> =>
-  colorVar.replace(DELIMITER, '') as ToColorKey<T>;
+  colorVar.replace(COLOR_DELIMITER, '') as ToColorKey<T>;
 
 interface Colors extends SelectionColorsMap {
   'base-text': string;

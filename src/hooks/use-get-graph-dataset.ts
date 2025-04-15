@@ -1,7 +1,10 @@
 import { ChartDataset } from 'chart.js';
-import { BASE_TEXT } from '~/constants/colors';
-import { useSelectedTokenStore } from '~/context/selected-token/use-selected-token';
+import { TOKENS_QUERY_KEY } from '~/constants/api';
+import { BASE_TEXT, COLORS, convertSelectionVarToKey } from '~/constants/colors';
+import { useQueryStore } from '~/context/query-store';
+import { useSelectedTokenStore } from '~/context/selected-token';
 import { generateGraphPoints } from '~/lib/utils/generate-graph-points';
+import { assignSelectionColor, parseSelectedTokens } from '~/lib/utils/helpers';
 
 const baseLineStyles: Omit<ChartDataset<'line'>, 'data'> = {
   borderWidth: 2,
@@ -15,12 +18,22 @@ const baseLineStyles: Omit<ChartDataset<'line'>, 'data'> = {
 
 export const useGetGraphDataset = () => {
   const { tokens } = useSelectedTokenStore();
+  const { queryParams } = useQueryStore();
 
-  const dataset: ChartDataset<'line'>[] = Object.entries(tokens).map(([tokenId, meta]) => ({
-    ...baseLineStyles,
-    data: generateGraphPoints(tokenId),
-    borderColor: meta.selectionColor,
-  }));
+  const queryTokens = parseSelectedTokens(queryParams[TOKENS_QUERY_KEY]);
+
+  const dataset: ChartDataset<'line'>[] = queryTokens.map((tokenId, idx) => {
+    const borderColor = COLORS[convertSelectionVarToKey(assignSelectionColor(idx))];
+
+    return {
+      ...baseLineStyles,
+      data: generateGraphPoints(Number(tokenId)),
+      label: tokens[tokenId]?.name,
+      borderColor,
+    };
+  });
+
+  console.log(dataset);
 
   return dataset;
 };

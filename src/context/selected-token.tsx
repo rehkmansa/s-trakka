@@ -1,5 +1,23 @@
+import { createContext, useContext } from 'react';
+import { IsUncertain } from '~/types/global';
 import { PropsWithChildren, useCallback, useMemo, useState } from 'react';
-import { SelectedToken, TokenMap, TokenStoreContext } from '~/context/selected-token/context';
+
+export interface SelectedToken {
+  id: number;
+  name: string;
+}
+
+export type TokenMap = Record<string, SelectedToken>;
+
+export interface TokenStoreContextValue {
+  tokens: TokenMap;
+  addToken: (token: SelectedToken) => void;
+  bulkAddTokens: (tokens: SelectedToken[]) => void;
+  getToken: (id: string) => IsUncertain<SelectedToken>;
+  removeToken: (id: string) => void;
+}
+
+const TokenStoreContext = createContext<IsUncertain<TokenStoreContextValue>>(undefined);
 
 export const TokenStoreProvider = ({ children }: PropsWithChildren) => {
   const [tokens, setTokens] = useState<TokenMap>({});
@@ -43,4 +61,13 @@ export const TokenStoreProvider = ({ children }: PropsWithChildren) => {
   );
 
   return <TokenStoreContext.Provider value={value}>{children}</TokenStoreContext.Provider>;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useSelectedTokenStore = (): TokenStoreContextValue => {
+  const ctx = useContext(TokenStoreContext);
+  if (!ctx) {
+    throw new Error('useTokenStore must be used within a TokenStoreProvider');
+  }
+  return ctx;
 };

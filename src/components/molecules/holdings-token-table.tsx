@@ -2,21 +2,21 @@ import { PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
-import { TOKENS_QUERY_KEY } from '~/constants/api';
-import { convertSelectionVarToKey, SelectionColors } from '~/constants/colors';
-import { SelectedToken } from '~/context/selected-token/context';
-import { useSelectedTokenStore } from '~/context/selected-token/use-selected-token';
-import { useWindowQuery } from '~/hooks/use-window-query-params';
+import { TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
+import { SelectionColors } from '~/constants/colors';
+import { useQueryStore } from '~/context/query-store';
+import { SelectedToken, useSelectedTokenStore } from '~/context/selected-token';
 import {
   assignSelectionColor,
   cn,
   getAvatarUrl,
   iife,
+  parseSelectedTokens,
   rangeArray,
   toHumanReadableNumber,
 } from '~/lib/utils/helpers';
 import { Token } from '~/mock/data';
-import { IsUncertain, Maybe, PropsWithClassname } from '~/types/global';
+import { Maybe, PropsWithClassname } from '~/types/global';
 
 const tableHeaders = [
   { label: 'Token Name', className: 'col-span-2' },
@@ -60,13 +60,6 @@ const SkeletonLoader = ({ className }: PropsWithClassname) => (
   <Skeleton className={cn('h-4 bg-component-outlines/10 rounded-none', className)} />
 );
 
-const DELIMITER = ',';
-
-const parseSelectedTokens = (query: IsUncertain<string>) => {
-  if (!query) return [];
-  return decodeURIComponent(query).split(DELIMITER);
-};
-
 export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
   rangeArray(rows).map((n) => (
     <Wrapper key={n}>
@@ -90,35 +83,35 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
 
   const { addToken, removeToken, bulkAddTokens, tokens } = useSelectedTokenStore();
 
-  const { addQuery, queryParams, removeQuery } = useWindowQuery();
+  const { addQuery, queryParams, removeQuery } = useQueryStore();
 
   const tokensQuery = queryParams[TOKENS_QUERY_KEY];
 
   const selectedTokens = parseSelectedTokens(tokensQuery);
 
-  const handleWrapperClick = (tokenId: string, address: string) => {
+  const handleWrapperClick = (tokenId: string, name: string) => {
     const activeTokenIds = parseSelectedTokens(tokensQuery);
 
     if (tokens[tokenId]) {
       removeToken(tokenId);
     } else {
-      // If no item, length is 0, give us first color.
-      const selectionColor = convertSelectionVarToKey(assignSelectionColor(activeTokenIds.length));
-
-      addToken({ address, id: Number(tokenId), selectionColor });
+      addToken({ name, id: Number(tokenId) });
     }
 
     if (!activeTokenIds.length) return addQuery(TOKENS_QUERY_KEY, tokenId);
 
     if (activeTokenIds.includes(tokenId)) {
-      const filtered = activeTokenIds.filter((t) => t != tokenId).join(DELIMITER);
+      const filtered = activeTokenIds.filter((t) => t != tokenId).join(TOKENS_DELIMITER);
 
       if (!filtered.length) return removeQuery(TOKENS_QUERY_KEY);
 
       return addQuery(TOKENS_QUERY_KEY, encodeURIComponent(filtered));
     }
 
-    addQuery(TOKENS_QUERY_KEY, encodeURIComponent([...activeTokenIds, tokenId].join(DELIMITER)));
+    addQuery(
+      TOKENS_QUERY_KEY,
+      encodeURIComponent([...activeTokenIds, tokenId].join(TOKENS_DELIMITER))
+    );
   };
 
   // This should hydrate the tokens store only on mount so we sync url state
@@ -131,11 +124,13 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
 
     const parsedSelectedTokens: SelectedToken[] = data
       .filter((rec) => selectedTokens.includes(rec.id.toString()))
-      .map((c, idx) => ({
-        address: c.address,
-        id: c.id,
-        selectionColor: convertSelectionVarToKey(assignSelectionColor(idx)),
-      }));
+      .map(
+        (c) =>
+          ({
+            name: c.symbol,
+            id: c.id,
+          } satisfies SelectedToken)
+      );
 
     bulkAddTokens(parsedSelectedTokens);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,6 +159,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
       >
         {data.map((rec) => {
           const stringId = rec.id.toString();
+
           const position = selectedTokens.findIndex((c) => c == stringId);
 
           const selected = position >= 0;
@@ -181,7 +177,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
                 } as React.CSSProperties
               }
               key={rec.address}
-              onClick={() => handleWrapperClick(stringId, rec.address)}
+              onClick={() => handleWrapperClick(stringId, rec.symbol)}
               className={cn(
                 'relative cursor-pointer before:hidden hover:before:block',
                 'before:absolute before:inset-0',
