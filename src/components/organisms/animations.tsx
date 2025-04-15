@@ -85,6 +85,7 @@ type StaggeredAnimationProps = Omit<FadeYAnimationProps, 'transition'> & {
   delay?: number;
   amountInView?: number;
   animate?: boolean;
+  initialOpacity?: number;
 };
 
 export const StaggeredAnimation = ({
@@ -95,11 +96,12 @@ export const StaggeredAnimation = ({
   delay,
   amountInView = 0.35,
   animate = false,
+  initialOpacity = 1,
 }: StaggeredAnimationProps) => {
   const Comp = createComp(comp);
 
   const containerVariants = {
-    hidden: { opacity: 0, y: initialY },
+    hidden: { opacity: initialOpacity, y: initialY },
     show: {
       opacity: 1,
       y: 0,
@@ -107,7 +109,7 @@ export const StaggeredAnimation = ({
         staggerChildren: 0.2,
         type: 'spring',
         bounce: 0.1,
-        visualDuration: 0.4,
+        visualDuration: 0.35,
         delay,
       },
     },
@@ -135,7 +137,7 @@ const StaggerChild = ({
   children,
   as: comp,
   className,
-  initialY = 50,
+  initialY = 30,
   ...props
 }: StaggeredChildProps) => {
   const Comp = createComp(comp);

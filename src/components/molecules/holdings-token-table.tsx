@@ -1,9 +1,9 @@
-import { Fragment, PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
 import { FadeYWhileInView, StaggeredAnimation } from '~/components/organisms/animations';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
-import { TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
+import { PAGE_LIMIT, TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
 import { SelectionColors } from '~/constants/colors';
 import { useQueryStore } from '~/context/query-store';
 import { SelectedToken, useSelectedTokenStore } from '~/context/selected-token';
@@ -49,14 +49,6 @@ const Wrapper = ({ children, onClick, className, style }: WrapperProps) => (
     <div className={cn('text-sm w-full px-3.5', GRID_STYLE)}>{children}</div>
   </div>
 );
-
-interface HoldingsTokenTableProps {
-  data: Token[];
-  onLoadMore: () => void;
-  hasMore: boolean;
-  isFetchingMore: boolean;
-  offset: number;
-}
 
 const SkeletonLoader = ({ className }: PropsWithClassname) => (
   <Skeleton className={cn('h-4 bg-component-outlines/10 rounded-none', className)} />
@@ -110,6 +102,21 @@ const TableRow = ({ onClick, selectionColor, token, selected }: TableRowProps) =
   </Wrapper>
 );
 
+const TableAnimator = ({ idx, children }: PropsWithChildren<{ idx: number; search: string }>) => {
+  const Comp = idx < PAGE_LIMIT ? StaggeredAnimation.Child : FadeYWhileInView;
+
+  return <Comp>{children}</Comp>;
+};
+
+interface HoldingsTokenTableProps {
+  data: Token[];
+  onLoadMore: () => void;
+  hasMore: boolean;
+  isFetchingMore: boolean;
+  offset: number;
+  search: string;
+}
+
 /**
  * HoldingsTokenTable
  *
@@ -119,7 +126,7 @@ const TableRow = ({ onClick, selectionColor, token, selected }: TableRowProps) =
  * grid-based or plain HTML table solutions.
  */
 export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
-  const { data, onLoadMore, hasMore, isFetchingMore, offset } = props;
+  const { data, onLoadMore, hasMore, isFetchingMore, search } = props;
 
   const { addToken, removeToken, bulkAddTokens, tokens } = useSelectedTokenStore();
 
@@ -191,14 +198,16 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
         </div>
         <div className="bg-[linear-gradient(to_right,#474747_31%,#f0f0f0_51%,#474747_71.5%)] w-full h-px" />
       </div>
-      <StaggeredAnimation className="flex-1 overflow-hidden">
+      {/* Animation with whileInView does not refire because it has already fired before,
+       hence the reason to change key so it can rerender. */}
+      <StaggeredAnimation animate className="flex-1 overflow-hidden">
         <InfiniteScrollView
           hasMore={hasMore}
           onLoadMore={onLoadMore}
           loading={isFetchingMore}
           className="h-full overflow-y-auto outline-none focus:ring focus:ring-component-outlines"
         >
-          {data.map((rec) => {
+          {data.map((rec, idx) => {
             const stringId = rec.id.toString();
 
             const position = selectedTokens.findIndex((c) => c == stringId);
@@ -213,27 +222,14 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
             const updateTokenState = () => handleWrapperClick(stringId, rec.symbol);
 
             return (
-              <Fragment key={rec.address}>
-                {offset ? (
-                  <FadeYWhileInView amount={0.25} initialY={10}>
-                    <TableRow
-                      token={rec}
-                      onClick={updateTokenState}
-                      selected={selected}
-                      selectionColor={selectionColor}
-                    />
-                  </FadeYWhileInView>
-                ) : (
-                  <StaggeredAnimation.Child>
-                    <TableRow
-                      token={rec}
-                      onClick={updateTokenState}
-                      selected={selected}
-                      selectionColor={selectionColor}
-                    />
-                  </StaggeredAnimation.Child>
-                )}
-              </Fragment>
+              <TableAnimator search={search} key={rec.address} idx={idx}>
+                <TableRow
+                  token={rec}
+                  onClick={updateTokenState}
+                  selected={selected}
+                  selectionColor={selectionColor}
+                />
+              </TableAnimator>
             );
           })}
 
