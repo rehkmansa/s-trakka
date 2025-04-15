@@ -17,3 +17,5 @@ export type AsComponentProps<T extends ComponentTypes = 'p'> = {
 export type TextProps = React.ComponentProps<'p'>;
 
 export type Maybe<T> = T | undefined | null;
+
+export type IsUncertain<T> = T | undefined;

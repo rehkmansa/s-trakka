@@ -3,6 +3,7 @@ import { type ClassArray } from 'clsx';
 import millify from 'millify';
 import { twMerge } from 'tailwind-merge';
 import { WALLET_ADDRESS_REGEX } from '~/constants/api';
+import { SELECTION_COLORS } from '~/constants/colors';
 import { ComponentTypes } from '~/types/global';
 
 export const cn = (...inputs: ClassArray) => twMerge(clsx(inputs));
@@ -52,3 +53,9 @@ export const isWalletAddress = (str: string) => WALLET_ADDRESS_REGEX.test(str);
 export const lowercase = (str: string) => str.toLowerCase();
 
 export const rangeArray = (length: number): number[] => Array.from({ length }, (_, i) => i);
+
+export const assignSelectionColor = (position: number): string => {
+  return SELECTION_COLORS[position % SELECTION_COLORS.length];
+};
+
+export const iife = <T>(fn: () => T) => fn();

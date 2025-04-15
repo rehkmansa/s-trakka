@@ -6,11 +6,27 @@
   --color-base-text: #f0f0f0;
   --color-sub-text: #7e7e7e;
   --color-component-outlines: #474747;
-  --color-base-red: #ff0014;
   --color-pfp-outline: #d9d9d9;
-  --color-base-green: #00ff99;
   --color-chart-lines: #474747;
   --color-chart-title: #7e7e7e;
+
+  --color-base-green: #00ff99;
+  --color-base-purple: #a25ed2;
+  --color-base-red: #ff0014;
+  --color-base-orange: #f95200;
+
+  /* Selection colors */
+  --color-selection-purple: #a25ed2;
+  --color-selection-green: #00ff99;
+  --color-selection-orange: #f95200;
+  --color-selection-red: #ff3344;
+  --color-selection-yellow: #ffc800;
+  --color-selection-blue: #007bff;
+  --color-selection-pink: #ff55cc;
+  --color-selection-teal: #00e6e6;
+  --color-selection-indigo: #5c6ac4;
+  --color-selection-lime: #bfff00;
+  --color-selection-brown: #6b4f3b;
 
   --font-main: 'Heebo', sans-serif;
   --font-accent: 'IBM Plex Mono', monospace;
