@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { type ClassArray } from 'clsx';
 import millify from 'millify';
 import { twMerge } from 'tailwind-merge';
+import { WALLET_ADDRESS_REGEX } from '~/constants/api';
 import { ComponentTypes } from '~/types/global';
 
 export const cn = (...inputs: ClassArray) => twMerge(clsx(inputs));
@@ -20,9 +21,16 @@ export const mockRequest = async (durationInMs = 500) => {
   });
 };
 
-export const mergeArrayRecords = <T extends unknown[]>(old: T | undefined, newData: T) => {
-  if (!old) return newData;
-  return [...old, ...newData];
+export const mergeArrayRecords = <T extends Record<string, unknown>, U extends keyof T>(
+  oldList: T[] = [],
+  newList: T[] = [],
+  uniqueKey: U
+): T[] => {
+  const map = new Map<string, T>();
+  [...oldList, ...newList].forEach((item) => {
+    map.set(String(item[uniqueKey]), item);
+  });
+  return Array.from(map.values());
 };
 
 /**
@@ -38,3 +46,9 @@ export const getAvatarUrl = (name: string): string => {
 };
 
 export const toHumanReadableNumber = (num: number) => millify(num, { precision: 2 });
+
+export const isWalletAddress = (str: string) => WALLET_ADDRESS_REGEX.test(str);
+
+export const lowercase = (str: string) => str.toLowerCase();
+
+export const rangeArray = (length: number): number[] => Array.from({ length }, (_, i) => i);
