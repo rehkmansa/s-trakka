@@ -34,7 +34,10 @@ interface WrapperProps extends PropsWithChildren {
 const Wrapper = ({ children, onClick, className, style }: WrapperProps) => (
   <div
     role="button"
-    className={cn('flex items-center justify-center h-[30px]', className)}
+    className={cn(
+      'flex items-center justify-center h-[30px] text-base-text/80 font-accent',
+      className
+    )}
     style={style}
     onClick={onClick}
   >
@@ -141,7 +144,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
                 'relative cursor-pointer before:hidden hover:before:block',
                 'before:absolute before:inset-0',
                 'before:bg-(--list-selection-color)/30 before:blur-[2px]',
-                { 'border border-(--list-selection-color)': isSelected }
+                { 'border border-(--list-selection-color) text-base-text': isSelected }
               )}
             >
               <div className="col-span-2 flex items-center gap-3 relative">

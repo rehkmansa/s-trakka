@@ -26,7 +26,7 @@ const searchTokens = (query: Maybe<string>) => {
 export const getTokens = async (params?: GetTokensParams) => {
   const { limit = PAGE_LIMIT, offset = 0, search } = params ?? {};
 
-  await mockRequest(search ? 200 : undefined);
+  await mockRequest(search || offset ? 200 : undefined);
 
   const filteredTokens = searchTokens(search);
 

@@ -16,7 +16,7 @@ export const InfiniteScrollView = ({
   onLoadMore,
   hasMore,
   loading,
-  threshold = 0.5,
+  threshold = 0.3,
   rootMargin = '0px',
   className,
 }: InfiniteScrollViewProps) => {
