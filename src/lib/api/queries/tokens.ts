@@ -30,6 +30,8 @@ export const getTokens = async (params?: GetTokensParams) => {
 
   const filteredTokens = searchTokens(search);
 
+  if (!search) return { data: filteredTokens, left: 0 };
+
   const tokens = filteredTokens.slice(offset, offset + limit);
   const left = Math.max(0, filteredTokens.length - (offset + limit));
 
