@@ -8,7 +8,7 @@ import {
 } from 'react';
 import type { IsUncertain } from '~/types/global';
 
-type QueryParams = Record<string, IsUncertain<string>>;
+export type QueryParams = Record<string, IsUncertain<string>>;
 
 interface QueryContextValue {
   queryParams: QueryParams;

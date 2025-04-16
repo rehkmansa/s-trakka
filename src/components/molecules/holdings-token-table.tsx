@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { Fragment, PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TableHeaderCell, TableHeaderGradient } from '~/components/atoms/table';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
@@ -20,7 +20,9 @@ import {
 import { Token } from '~/mock/data';
 import { Maybe, PropsWithClassname } from '~/types/global';
 
-const tableHeaders = [
+const GRID_STYLE = 'grid grid-cols-5 gap-4';
+
+const TABLE_HEADERS = [
   { label: 'Token Name', className: 'col-span-2' },
   { label: 'Market Cap', className: 'text-base-text text-right' },
   { label: 'Value', className: 'text-right' },
@@ -28,8 +30,6 @@ const tableHeaders = [
 ];
 
 const getImageSrc = (src: Maybe<string>, name: string) => src ?? getAvatarUrl(name);
-
-const GRID_STYLE = 'grid grid-cols-5 gap-4';
 
 interface WrapperProps extends PropsWithChildren {
   className?: string;
@@ -55,15 +55,18 @@ const SkeletonLoader = ({ className }: PropsWithClassname) => (
   <Skeleton className={cn('h-4 bg-component-outlines/10 rounded-none', className)} />
 );
 
-export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) =>
-  rangeArray(rows).map((n) => (
-    <Wrapper key={n}>
-      <SkeletonLoader className="col-span-2" />
-      <SkeletonLoader />
-      <SkeletonLoader />
-      <SkeletonLoader />
-    </Wrapper>
-  ));
+export const HoldingsTokenTableLoader = ({ rows }: { rows: number }) => (
+  <Fragment>
+    {rangeArray(rows).map((n) => (
+      <Wrapper key={n}>
+        <SkeletonLoader className="col-span-2" />
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+      </Wrapper>
+    ))}
+  </Fragment>
+);
 
 interface TableRowProps {
   selectionColor: string;
@@ -103,7 +106,7 @@ const TableRow = ({ onClick, selectionColor, token, selected }: TableRowProps) =
   </Wrapper>
 );
 
-const TableAnimator = ({ idx, children }: PropsWithChildren<{ idx: number; search: string }>) => {
+const TableAnimator = ({ idx, children }: PropsWithChildren<{ idx: number }>) => {
   const Comp = idx < PAGE_LIMIT ? StaggeredAnimation.Child : FadeYWhileInView;
 
   return <Comp>{children}</Comp>;
@@ -127,7 +130,7 @@ interface HoldingsTokenTableProps {
  * grid-based or plain HTML table solutions.
  */
 export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
-  const { data, onLoadMore, hasMore, isFetchingMore, search } = props;
+  const { data, onLoadMore, hasMore, isFetchingMore } = props;
 
   const { addToken, removeToken, bulkAddTokens, tokens } = useSelectedTokenStore();
 
@@ -188,7 +191,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
     <div className="flex-1 flex-col flex overflow-hidden min-h-0">
       <div className="">
         <div className={cn('px-3 pb-2 shrink-0', GRID_STYLE)}>
-          {tableHeaders.map((header) => (
+          {TABLE_HEADERS.map((header) => (
             <TableHeaderCell className={header.className} key={header.label}>
               <p>{header.label}</p>
             </TableHeaderCell>
@@ -217,13 +220,13 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
               return assignSelectionColor(position);
             });
 
-            const updateTokenState = () => handleWrapperClick(stringId, rec.symbol);
+            const addOrRemoveTokenSelection = () => handleWrapperClick(stringId, rec.symbol);
 
             return (
-              <TableAnimator search={search} key={rec.address} idx={idx}>
+              <TableAnimator key={rec.address} idx={idx}>
                 <TableRow
                   token={rec}
-                  onClick={updateTokenState}
+                  onClick={addOrRemoveTokenSelection}
                   selected={selected}
                   selectionColor={selectionColor}
                 />
