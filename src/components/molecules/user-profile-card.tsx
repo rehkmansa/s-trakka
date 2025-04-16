@@ -1,6 +1,6 @@
 export const UserProfileCard = () => {
   return (
-    <div className="relative">
+    <div className="relative w-[248px] min-h-[282px] bg-highlight-bg">
       <svg
         width={248}
         height={282}
