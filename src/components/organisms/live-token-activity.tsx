@@ -1,4 +1,4 @@
-import { TransactionsTable } from '~/components/molecules/transactions-table';
+import { TransactionsTable } from '~/components/molecules/transaction-table';
 
 const SVGBackground = () => (
   <svg
