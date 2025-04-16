@@ -85,7 +85,7 @@ export const Popover = <TRef extends HTMLElement, CRef extends HTMLElement>({
         {renderTrigger({ ...baseProps, ref: triggerRef, onClick: toggle })}
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Content asChild>
+        <PopoverPrimitive.Content align="end" asChild>
           {renderContent({ ...baseProps, ref: contentRef, isOpen })}
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
