@@ -3,7 +3,7 @@ import { TableHeaderCell, TableHeaderGradient } from '~/components/atoms/table';
 import { FadeYWhileInView } from '~/components/organisms/animations';
 import { useSelectedTokenStore } from '~/context/selected-token';
 import { useTokenLiveActivity } from '~/hooks/use-token-live-activity';
-import { cn } from '~/lib/utils/helpers';
+import { cn, shortenUsername } from '~/lib/utils/helpers';
 
 const GRID_STYLE = 'grid grid-cols-9 gap-2 px-12';
 
@@ -60,7 +60,7 @@ export const TransactionsTable = () => {
                 {Math.abs(t.pnl).toFixed(2)}
               </NeonText>
               <button className="w-full block text-left" type="button">
-                {t.user}
+                {shortenUsername(t.user)}
               </button>
             </div>
           </FadeYWhileInView>
