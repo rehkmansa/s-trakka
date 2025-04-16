@@ -1,4 +1,8 @@
 import { motion } from 'motion/react';
+import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
+import { useUserProfile } from '~/hooks/use-user-profile';
+import { cn } from '~/lib/utils/helpers';
+import { UserProfile } from '~/mock/generate-user-profile';
 
 const SVGBackground = () => {
   return (
@@ -25,11 +29,57 @@ const SVGBackground = () => {
   );
 };
 
-export const UserProfileCard = () => {
+const Meta = ({ profitable }: { profitable: boolean }) => {
+  return (
+    <div
+      className={cn('text-base-green text-sm flex items-center gap-1', {
+        'text-base-red': !profitable,
+      })}
+    >
+      <div className={cn('size-2.5 bg-base-green -mt-0.5', { 'bg-base-red': !profitable })} />{' '}
+      <p className="leading-none">{!profitable ? 'NOT ' : ''}PROFITABLE TRADER</p>
+    </div>
+  );
+};
+
+const Row = ({ label, value }: { label: string; value: number }) => (
+  <div className="flex items-center text-sm">
+    <p className="font-medium">{label}</p>
+    <TextWithEthIcon className="text-right ml-auto">{value}</TextWithEthIcon>
+  </div>
+);
+
+export interface UserProfileCardProps {
+  name: string;
+}
+
+const fields: { label: string; key: Exclude<keyof UserProfile, 'profitable'> }[] = [
+  { key: 'balance', label: 'Balance' },
+  { key: 'est_value', label: 'Est. Value.' },
+  { key: 'pnl', label: 'PNL' },
+  { key: 'upnl', label: 'UPNL' },
+];
+
+export const UserProfileCard = ({ name }: UserProfileCardProps) => {
+  const { profitable, ...details } = useUserProfile(name);
+
   return (
     <motion.div className="relative w-[248px] min-h-[282px]">
+      <span className="font-accent text-[8px]/[1] text-sub-text absolute right-[-12px] z-[1] top-[60px] rotate-90">
+        TRADER_RECAP
+      </span>
       <SVGBackground />
-      <div className="p-[34] relative">{/* CONTENT GOES HERE */}</div>
+      <div className="p-[34px] relative space-y-5">
+        <div className="space-y-2">
+          <h4 className="font-bold text-[25px]/[1.2] text-white">{name}</h4>
+          <Meta profitable={profitable} />
+        </div>
+        <div className="space-y-5">
+          {fields.map((f) => (
+            <Row key={f.key} label={f.label} value={details[f.key]} />
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 };

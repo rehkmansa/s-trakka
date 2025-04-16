@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
-import { UserProfileCard } from '~/components/molecules/user-profile-card';
+import { UserProfileCard, UserProfileCardProps } from '~/components/molecules/user-profile-card';
 
 const MAX_ROTATION = 10;
 
-export const TransactionTablePopoverCard = () => {
+export const TransactionTablePopoverCard = (props: UserProfileCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const rawX = useMotionValue(0);
@@ -55,7 +55,7 @@ export const TransactionTablePopoverCard = () => {
       }}
       className=""
     >
-      <UserProfileCard />
+      <UserProfileCard {...props} />
     </motion.div>
   );
 };

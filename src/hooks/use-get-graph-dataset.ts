@@ -32,7 +32,5 @@ export const useGetGraphDataset = () => {
     };
   });
 
-  console.log(dataset);
-
   return dataset;
 };
