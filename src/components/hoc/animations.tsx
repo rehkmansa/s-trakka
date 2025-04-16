@@ -35,6 +35,7 @@ export type FadeYAnimationProps = BaseAnimationProps<{
 
 interface FadeYWhileInViewProps extends FadeYAnimationProps {
   amount?: number;
+  framerProps?: MotionProps;
 }
 
 export const FadeYWhileInView = ({
@@ -44,11 +45,13 @@ export const FadeYWhileInView = ({
   as: comp = 'div',
   transition,
   amount = 0.3,
+  framerProps,
 }: FadeYWhileInViewProps) => {
   const Comp = createComp(comp);
 
   return (
     <Comp
+      {...framerProps}
       initial={{ y: initialY, opacity: 0, scale: 1 }}
       whileInView={{ y: 0, opacity: 1, scale: 1 }}
       transition={createBaseSpringAnimation(transition)}
