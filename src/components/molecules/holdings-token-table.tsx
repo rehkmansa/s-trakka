@@ -1,5 +1,6 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
+import { TableHeaderCell, TableHeaderGradient } from '~/components/atoms/table';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
 import { FadeYWhileInView, StaggeredAnimation } from '~/components/organisms/animations';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
@@ -188,15 +189,12 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
       <div className="">
         <div className={cn('px-3 pb-2 shrink-0', GRID_STYLE)}>
           {tableHeaders.map((header) => (
-            <div
-              key={header.label}
-              className={cn('text-sm/[20px] font-extralight text-chart-title', header.className)}
-            >
+            <TableHeaderCell className={header.className} key={header.label}>
               <p>{header.label}</p>
-            </div>
+            </TableHeaderCell>
           ))}
         </div>
-        <div className="bg-[linear-gradient(to_right,#474747_31%,#f0f0f0_51%,#474747_71.5%)] w-full h-px" />
+        <TableHeaderGradient />
       </div>
       {/* Animation with whileInView does not refire because it has already fired before,
        hence the reason to change key so it can rerender. */}
