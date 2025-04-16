@@ -28,7 +28,10 @@ export const HoldingsTable = () => {
         <div className="px-3">
           <Searchbar
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setOffset(0); // Clear all offsets.;
+            }}
             iconClassName="text-base-text"
             wrapperClassName="py-15px"
           />
