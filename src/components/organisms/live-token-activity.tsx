@@ -2,7 +2,7 @@ import { TransactionsTable } from '~/components/molecules/transactions-table';
 
 export const LiveTokenActivity = () => {
   return (
-    <div className="relative w-full flex-1 bg-component-bg shrink-0">
+    <div className="relative w-full flex-1 bg-component-bg shrink-0 flex flex-col overflow-hidden">
       <div className="py-6 text-center">
         <h4 className="font-medium text-xl/[1]">LIVE ACTIVITY</h4>
       </div>

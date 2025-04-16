@@ -206,7 +206,7 @@ export const HoldingsTokenTable = (props: HoldingsTokenTableProps) => {
           hasMore={hasMore}
           onLoadMore={onLoadMore}
           loading={isFetchingMore}
-          className="h-full overflow-y-auto outline-none focus:ring focus:ring-component-outlines"
+          className="h-full overflow-y-auto outline-none focus:ring focus:ring-component-outlines no-scrollbar"
         >
           {data.map((rec, idx) => {
             const stringId = rec.id.toString();
