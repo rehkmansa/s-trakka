@@ -85,7 +85,7 @@ export const TransactionsTable = () => {
   const transactions = useTokenLiveActivity();
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden relative">
       <TableHeader />
       <div className="flex-1 overflow-y-auto space-y-3 text-sm text-base-text/90 font-accent no-scrollbar">
         {transactions.map((trx) => (
