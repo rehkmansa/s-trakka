@@ -35,7 +35,7 @@ const seedRandom = (seed: string) => {
   };
 };
 
-export const generateMockTransactions = (tokenIds: string[]): Transaction[] => {
+export const generateTransactions = (tokenIds: string[]): Transaction[] => {
   const allTxns: Transaction[] = [];
 
   for (const tokenId of tokenIds) {

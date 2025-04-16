@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import { type ClassArray } from 'clsx';
 import millify from 'millify';
 import { twMerge } from 'tailwind-merge';
-import { TOKENS_DELIMITER, WALLET_ADDRESS_REGEX } from '~/constants/api';
+import { TOKENS_DELIMITER, TOKENS_QUERY_KEY, WALLET_ADDRESS_REGEX } from '~/constants/api';
 import { SELECTION_COLORS, SelectionColors } from '~/constants/colors';
+import { QueryParams } from '~/context/query-store';
 import { ComponentTypes, IsUncertain } from '~/types/global';
 
 export const cn = (...inputs: ClassArray) => twMerge(clsx(inputs));
@@ -63,4 +64,8 @@ export const iife = <T>(fn: () => T) => fn();
 export const parseSelectedTokens = (query: IsUncertain<string>) => {
   if (!query) return [];
   return decodeURIComponent(query).split(TOKENS_DELIMITER);
+};
+
+export const getTokenIdsFromQuery = (queryStore: QueryParams) => {
+  return parseSelectedTokens(queryStore[TOKENS_QUERY_KEY]);
 };
