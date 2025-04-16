@@ -1,5 +1,5 @@
 import { useQueryStore } from '~/context/query-store';
-import { generateTransactions } from '~/lib/utils/generate-transactions';
+import { generateTransactions } from '~/mock/generate-transactions';
 import { getTokenIdsFromQuery } from '~/lib/utils/helpers';
 
 export const useTokenLiveActivity = () => {
