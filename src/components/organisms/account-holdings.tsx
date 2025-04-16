@@ -9,7 +9,7 @@ import { useDebouncedSearch } from '~/hooks/use-debounced-search';
 import { useGetTokens } from '~/lib/api/hooks/use-get-tokens';
 import { cn } from '~/lib/utils/helpers';
 
-export const HoldingsTable = () => {
+export const AccountHoldings = () => {
   const [offset, setOffset] = useState(0);
   const { value, debouncedValue, setValue } = useDebouncedSearch('');
   const { data: tokens, isFetchingMore, loading } = useGetTokens(offset, debouncedValue);
