@@ -69,3 +69,10 @@ export const parseSelectedTokens = (query: IsUncertain<string>) => {
 export const getTokenIdsFromQuery = (queryStore: QueryParams) => {
   return parseSelectedTokens(queryStore[TOKENS_QUERY_KEY]);
 };
+
+export const shortenUsername = (name: string, length = 14) => {
+  const delimiter = '...';
+  if (name.length <= length) return name;
+
+  return `${name.slice(0, length - delimiter.length)}${delimiter}`;
+};
