@@ -82,7 +82,7 @@ export const TransactionTableRow = ({
                   }}
                   {...props}
                 >
-                  <TransactionTablePopoverCard />
+                  <TransactionTablePopoverCard name={transaction.user} />
                 </motion.div>
               )}
             </AnimatePresence>
