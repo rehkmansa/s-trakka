@@ -15,7 +15,7 @@ export const UserProfileCard = () => {
           fill="transparent"
           stroke="currentColor"
           className="stroke-base-green"
-          strokeWidth={0.5}
+          strokeWidth={1}
         />
       </svg>
     </div>
