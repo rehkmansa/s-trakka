@@ -1,6 +1,7 @@
 import { MOCK_RANDOM_USERS } from '~/mock/data';
 
 export type Transaction = {
+  id: string;
   time: string;
   type: 'buy' | 'sell';
   token: string;
@@ -51,6 +52,7 @@ export const generateTransactions = (tokenIds: string[]): Transaction[] => {
       const user = MOCK_RANDOM_USERS[Math.floor(rng() * MOCK_RANDOM_USERS.length)];
 
       return {
+        id: `${tokenId}-${i}`, // 👈 Unique ID per token and transaction index
         time: timeAgo(i),
         type,
         token: tokenId,
