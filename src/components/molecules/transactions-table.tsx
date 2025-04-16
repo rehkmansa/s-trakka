@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { NeonText } from '~/components/atoms/neon-text';
 import { TableHeaderCell, TableHeaderGradient } from '~/components/atoms/table';
 import { FadeYWhileInView } from '~/components/hoc/animations';
+import { Popover } from '~/components/hoc/popover';
+import { UserProfileCard } from '~/components/molecules/user-profile-card';
 import { TokenMap, useSelectedTokenStore } from '~/context/selected-token';
 import { useTokenLiveActivity } from '~/hooks/use-token-live-activity';
 import { Transaction } from '~/lib/utils/generate-transactions';
@@ -35,8 +37,6 @@ const TableHeader = () => (
 );
 
 const TableRow = ({ transaction, tokens }: { transaction: Transaction; tokens: TokenMap }) => {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <FadeYWhileInView
       initialY={15}
@@ -59,9 +59,22 @@ const TableRow = ({ transaction, tokens }: { transaction: Transaction; tokens: T
         <NeonText variant={transaction.pnl < 1 ? 'downtrend' : 'uptrend'}>
           {Math.abs(transaction.pnl).toFixed(2)}
         </NeonText>
-        <button className="w-full block text-left" type="button">
-          {shortenUsername(transaction.user)}
-        </button>
+        <Popover<HTMLButtonElement, HTMLDivElement>>
+          {({ isOpen, contentProps, triggerProps }) => (
+            <div className="relative">
+              <button className="text-left w-full" type="button" {...triggerProps}>
+                {shortenUsername(transaction.user)}
+              </button>
+              <AnimatePresence>
+                {isOpen && (
+                  <div className="absolute bottom-0 z-[1000]  right-0" {...contentProps}>
+                    <UserProfileCard />
+                  </div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+        </Popover>
       </div>
     </FadeYWhileInView>
   );
