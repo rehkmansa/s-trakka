@@ -69,7 +69,7 @@ export const TokenStrengthChart: React.FC = () => {
   const datasets = useGetGraphDataset();
 
   return (
-    <div className="relative w-full py-3.5 bg-component-bg shrink-0 h-[467px] px-10">
+    <div className="relative w-full py-3.5 bg-component-bg shrink-0 h-[367px] px-10">
       <svg
         width={1303}
         height={467}
