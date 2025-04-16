@@ -2,7 +2,7 @@ import { ChartDataset } from 'chart.js';
 import { BASE_TEXT, COLORS, convertSelectionVarToKey } from '~/constants/colors';
 import { useQueryStore } from '~/context/query-store';
 import { useSelectedTokenStore } from '~/context/selected-token';
-import { generateGraphPoints } from '~/lib/utils/generate-graph-points';
+import { generateGraphPoints } from '~/mock/generate-graph-points';
 import { assignSelectionColor, getTokenIdsFromQuery } from '~/lib/utils/helpers';
 
 const baseLineStyles: Omit<ChartDataset<'line'>, 'data'> = {

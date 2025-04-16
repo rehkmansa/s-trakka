@@ -3,7 +3,7 @@ import { NeonText } from '~/components/atoms/neon-text';
 import { FadeYWhileInView } from '~/components/hoc/animations';
 import { Popover } from '~/components/hoc/popover';
 import { TokenMap } from '~/context/selected-token';
-import { Transaction } from '~/lib/utils/generate-transactions';
+import { Transaction } from '~/mock/generate-transactions';
 import { cn, shortenUsername } from '~/lib/utils/helpers';
 import { motion } from 'motion/react';
 import { TransactionTablePopoverCard } from '~/components/molecules/transaction-table/popover-card';
