@@ -2,7 +2,7 @@ import { Fragment, PropsWithChildren, useEffect } from 'react';
 import { Skeleton } from '~/components/atoms/skeleton';
 import { TableHeaderCell, TableHeaderGradient } from '~/components/atoms/table';
 import { TextWithEthIcon } from '~/components/atoms/text-with-eth-icon';
-import { FadeYWhileInView, StaggeredAnimation } from '~/components/organisms/animations';
+import { FadeYWhileInView, StaggeredAnimation } from '~/components/hoc/animations';
 import { InfiniteScrollView } from '~/components/organisms/infinite-scroll-view';
 import { PAGE_LIMIT, TOKENS_DELIMITER, TOKENS_QUERY_KEY } from '~/constants/api';
 import { SelectionColors } from '~/constants/colors';
@@ -41,7 +41,7 @@ const Wrapper = ({ children, onClick, className, style }: WrapperProps) => (
   <div
     role="button"
     className={cn(
-      'flex items-center justify-center h-[30px] text-base-text/80 font-accent',
+      'flex items-center justify-center h-[30px] text-base-text/90 font-accent',
       className
     )}
     style={style}
