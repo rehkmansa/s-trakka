@@ -59,22 +59,22 @@ const TableRow = ({ transaction, tokens }: { transaction: Transaction; tokens: T
         <NeonText variant={transaction.pnl < 1 ? 'downtrend' : 'uptrend'}>
           {Math.abs(transaction.pnl).toFixed(2)}
         </NeonText>
-        <Popover<HTMLButtonElement, HTMLDivElement>>
-          {({ isOpen, contentProps, triggerProps }) => (
-            <div className="relative">
-              <button className="text-left w-full" type="button" {...triggerProps}>
-                {shortenUsername(transaction.user)}
-              </button>
-              <AnimatePresence>
-                {isOpen && (
-                  <div className="absolute bottom-0 z-[1000]  right-0" {...contentProps}>
-                    <UserProfileCard />
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
+        <Popover<HTMLButtonElement, HTMLDivElement>
+          renderTrigger={(props) => (
+            <button className="text-left w-full" type="button" {...props}>
+              {shortenUsername(transaction.user)}
+            </button>
           )}
-        </Popover>
+          renderContent={({ isOpen, ...props }) => (
+            <AnimatePresence>
+              {isOpen && (
+                <div {...props}>
+                  <UserProfileCard />
+                </div>
+              )}
+            </AnimatePresence>
+          )}
+        />
       </div>
     </FadeYWhileInView>
   );
