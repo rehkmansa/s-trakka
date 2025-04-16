@@ -2,7 +2,8 @@ import { MOCK_RANDOM_USERS } from '~/mock/data';
 
 export type Transaction = {
   id: string;
-  time: string;
+  dateTime: string; // ISO 8601
+  time: string; // still keep for display
   type: 'buy' | 'sell';
   token: string;
   price_usd: number;
@@ -13,10 +14,19 @@ export type Transaction = {
   user: string;
 };
 
-const timeAgo = (index: number) => {
-  if (index < 5) return `${index * 5 + 5}s`;
-  if (index < 15) return `${index - 4}min`;
-  return `${(index - 14) * 2}m`;
+// Returns both a human-readable time and a true timestamp
+const generateTimeFields = (index: number): { dateTime: string; time: string } => {
+  const now = Date.now();
+  let msAgo = 0;
+
+  if (index < 5) msAgo = (index * 5 + 5) * 1000;
+  else if (index < 15) msAgo = (index - 4) * 60 * 1000;
+  else msAgo = (index - 14) * 2 * 60 * 1000;
+
+  const dateTime = new Date(now - msAgo).toISOString();
+  const time = msAgo < 60000 ? `${Math.floor(msAgo / 1000)}s` : `${Math.floor(msAgo / 60000)}min`;
+
+  return { dateTime, time };
 };
 
 // Simple seeded PRNG (LCG)
@@ -43,6 +53,7 @@ export const generateTransactions = (tokenIds: string[]): Transaction[] => {
     const rng = seedRandom(tokenId);
 
     const txns: Transaction[] = Array.from({ length: 30 }, (_, i) => {
+      const { time, dateTime } = generateTimeFields(i);
       const type = rng() > 0.5 ? 'buy' : 'sell';
       const price_usd = parseFloat((rng() * 1000 + 1).toFixed(2));
       const token_amount = parseFloat((rng() * 20 + 1).toFixed(3));
@@ -52,8 +63,9 @@ export const generateTransactions = (tokenIds: string[]): Transaction[] => {
       const user = MOCK_RANDOM_USERS[Math.floor(rng() * MOCK_RANDOM_USERS.length)];
 
       return {
-        id: `${tokenId}-${i}`, // 👈 Unique ID per token and transaction index
-        time: timeAgo(i),
+        id: `${tokenId}-${i}`,
+        dateTime,
+        time,
         type,
         token: tokenId,
         price_usd,
@@ -68,5 +80,5 @@ export const generateTransactions = (tokenIds: string[]): Transaction[] => {
     allTxns.push(...txns);
   }
 
-  return allTxns;
+  return allTxns.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
 };
